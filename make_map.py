@@ -21,6 +21,9 @@ def embed(dist, df, stations):
                    dissimilarity="precomputed", n_jobs=1)
 
         pos = mds.fit(dist).embedding_
+	rot_pos = np.zeros_like(pos)
+	rot_pos[:,0] = pos[:,1]
+	rot_pos[:,1] = -1 * pos[:,0]
         
         stat_col = []
         stat_x   = []
@@ -35,9 +38,9 @@ def embed(dist, df, stations):
                   tube_df[tube_df['Station to'] == station].Colour.values[0])
 
 
-                stat_x.append(pos[i, 0])
+                stat_x.append(rot_pos[i, 0])
 
-                stat_y.append(pos[i, 1])
+                stat_y.append(rot_pos[i, 1])
         
         d = {'Name':stations, 'X':stat_x, 'Y':stat_y, 'Colour':stat_col}
         
